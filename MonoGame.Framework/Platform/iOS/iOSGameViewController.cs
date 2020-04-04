@@ -8,6 +8,7 @@ using System.Drawing;
 using UIKit;
 using Foundation;
 using CoreGraphics;
+using System.Linq;
 
 namespace Microsoft.Xna.Framework
 {
@@ -76,7 +77,7 @@ namespace Microsoft.Xna.Framework
 
         public new iOSGameView View
         {
-            get { return (iOSGameView)base.View; }
+            get { return (base.View as iOSGameView) ?? base.View.Subviews.FirstOrDefault() as iOSGameView; }
         }
         #if !TVOS
 
@@ -120,7 +121,7 @@ namespace Microsoft.Xna.Framework
 
 		public override void ViewWillTransitionToSize(CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-			CGSize oldSize = View.Bounds.Size;
+			CGSize oldSize = base.View.Bounds.Size;
 
             if (oldSize != toSize)
             {

@@ -96,8 +96,8 @@ namespace Microsoft.Xna.Framework {
 
 		public override Rectangle ClientBounds {
 			get {
-				var bounds = _viewController.View.Bounds;
-                var scale = _viewController.View.ContentScaleFactor;
+				var bounds = (_viewController as UIViewController).View.Bounds;
+                var scale = (_viewController as UIViewController).View.ContentScaleFactor;
 
                 // TODO: Calculate this only when dirty.
                 if (_viewController is iOSGameViewController)
@@ -147,13 +147,13 @@ namespace Microsoft.Xna.Framework {
 			get {
 				// TODO: Verify that View.Handle is a sensible
 				//       value to return here.
-				return _viewController.View.Handle;
+				return (_viewController as UIViewController).View.Handle;
 			}
 		}
 
 		public override string ScreenDeviceName {
 			get {
-				var screen = _viewController.View.Window.Screen;
+				var screen = (_viewController as UIViewController).View.Window.Screen;
 				if (screen == UIScreen.MainScreen)
 					return "Main Display";
 				else

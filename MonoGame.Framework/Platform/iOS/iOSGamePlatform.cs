@@ -140,7 +140,10 @@ namespace Microsoft.Xna.Framework
             // the duration of a frame on iOS (Which is 1/60.0f at the time of writing this).
             _displayLink.FrameInterval = (int)Math.Round(60f * Game.TargetElapsedTime.TotalSeconds);
 
-            _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
+            // NSDefaultRunLoopMode
+            // https://stackoverflow.com/questions/4876488/animation-in-opengl-es-view-freezes-when-uiscrollview-is-dragged-on-iphone/4878182#4878182
+            // For UIScrollView scrolling
+            _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoop.NSRunLoopCommonModes);
         }
 
 
@@ -214,16 +217,16 @@ namespace Microsoft.Xna.Framework
         {
             if (!Game.IsActive)
                 return;
-
+            
             if (IsPlayingVideo)
                 return;
-
+            
             // FIXME: Remove this call, and the whole Tick method, once
             //        GraphicsDevice is where platform-specific Present
             //        functionality is actually implemented.  At that
             //        point, it should be possible to pass Game.Tick
             //        directly to NSTimer.CreateRepeatingTimer.
-            _viewController.View.MakeCurrent();
+            _viewController.View?.MakeCurrent();
             Game.Tick ();
 
             if (!IsPlayingVideo)
@@ -234,7 +237,7 @@ namespace Microsoft.Xna.Framework
                     // disposing resources disposed from a non-ui thread
                     Game.GraphicsDevice.Present();
                 }
-                _viewController.View.Present ();
+                _viewController.View?.Present ();
             }
         }
 
@@ -350,7 +353,7 @@ namespace Microsoft.Xna.Framework
 				presentParams.DisplayOrientation = orientation;
 
                 // Recalculate our views.
-                ViewController.View.LayoutSubviews();
+                (ViewController as UIViewController).View.LayoutSubviews();
 				
                 gdm.ApplyChanges();
 			}
