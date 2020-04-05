@@ -544,6 +544,10 @@ internal static class Sdl
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void d_sdl_getdrawablesize(IntPtr window, out int w, out int h);
+        public static d_sdl_getdrawablesize GetDrawableSize = FuncLoader.LoadFunction<d_sdl_getdrawablesize>(NativeLibrary, "SDL_GL_GetDrawableSize");
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void d_sdl_gl_deletecontext(IntPtr context);
         public static d_sdl_gl_deletecontext DeleteContext = FuncLoader.LoadFunction<d_sdl_gl_deletecontext>(NativeLibrary, "SDL_GL_DeleteContext");
 
