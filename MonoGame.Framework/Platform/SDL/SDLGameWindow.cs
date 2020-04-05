@@ -129,7 +129,7 @@ namespace Microsoft.Xna.Framework
 
             _handle = Sdl.Window.Create("", 0, 0,
                 GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight,
-                Sdl.Window.State.Hidden);
+                Sdl.Window.State.Hidden | Sdl.Window.State.AllowHighDPI);
         }
 
         internal void CreateWindow()
@@ -138,6 +138,7 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.OpenGL |
                 Sdl.Window.State.Hidden |
                 Sdl.Window.State.InputFocus |
+                Sdl.Window.State.AllowHighDPI |
                 Sdl.Window.State.MouseFocus;
 
             if (_handle != IntPtr.Zero)
@@ -209,6 +210,9 @@ namespace Microsoft.Xna.Framework
         {
             _screenDeviceName = screenDeviceName;
 
+            int windowWidth = (int)(clientWidth / Game.DisplayScale);
+            int windowHeight = (int)(clientHeight / Game.DisplayScale);
+
             var prevBounds = ClientBounds;
             var displayIndex = Sdl.Window.GetDisplayIndex(Handle);
 
@@ -229,9 +233,9 @@ namespace Microsoft.Xna.Framework
 
             if (!_willBeFullScreen || _game.graphicsDeviceManager.HardwareModeSwitch)
             {
-                Sdl.Window.SetSize(Handle, clientWidth, clientHeight);
-                _width = clientWidth;
-                _height = clientHeight;
+                Sdl.Window.SetSize(Handle, windowWidth, windowHeight);
+                _width = windowWidth;
+                _height = windowHeight;
             }
             else
             {
@@ -242,8 +246,8 @@ namespace Microsoft.Xna.Framework
             int ignore, minx = 0, miny = 0;
             Sdl.Window.GetBorderSize(_handle, out miny, out minx, out ignore, out ignore);
 
-            var centerX = Math.Max(prevBounds.X + ((prevBounds.Width - clientWidth) / 2), minx);
-            var centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - clientHeight) / 2), miny);
+            var centerX = Math.Max(prevBounds.X + ((prevBounds.Width - windowWidth) / 2), minx);
+            var centerY = Math.Max(prevBounds.Y + ((prevBounds.Height - windowHeight) / 2), miny);
 
             if (IsFullScreen && !_willBeFullScreen)
             {
@@ -253,8 +257,8 @@ namespace Microsoft.Xna.Framework
 
                 // This centering only occurs when exiting fullscreen
                 // so it should center the window on the current display.
-                centerX = displayRect.X + displayRect.Width / 2 - clientWidth / 2;
-                centerY = displayRect.Y + displayRect.Height / 2 - clientHeight / 2;
+                centerX = displayRect.X + displayRect.Width / 2 - windowWidth / 2;
+                centerY = displayRect.Y + displayRect.Height / 2 - windowHeight / 2;
             }
 
             // If this window is resizable, there is a bug in SDL 2.0.4 where
@@ -268,6 +272,8 @@ namespace Microsoft.Xna.Framework
                 OnClientSizeChanged();
 
             IsFullScreen = _willBeFullScreen;
+
+
 
             _supressMoved = true;
         }
@@ -287,15 +293,20 @@ namespace Microsoft.Xna.Framework
         {
             // SDL reports many resize events even if the Size didn't change.
             // Only call the code below if it actually changed.
-            if (_game.GraphicsDevice.PresentationParameters.BackBufferWidth == width &&
-                _game.GraphicsDevice.PresentationParameters.BackBufferHeight == height) {
+            var expectedBackBufferWidth = (int)(width * Game.DisplayScale);
+            var expectedBackBufferHeight = (int)(height * Game.DisplayScale);
+
+            if (_game.GraphicsDevice.PresentationParameters.BackBufferWidth == expectedBackBufferWidth &&
+                _game.GraphicsDevice.PresentationParameters.BackBufferHeight == expectedBackBufferHeight) {
                 return;
             }
-            _game.GraphicsDevice.PresentationParameters.BackBufferWidth = width;
-            _game.GraphicsDevice.PresentationParameters.BackBufferHeight = height;
-            _game.GraphicsDevice.Viewport = new Viewport(0, 0, width, height);
+            _game.GraphicsDevice.PresentationParameters.BackBufferWidth = expectedBackBufferWidth;
+            _game.GraphicsDevice.PresentationParameters.BackBufferHeight = expectedBackBufferHeight;
+            _game.GraphicsDevice.Viewport = new Viewport(0, 0, expectedBackBufferWidth, expectedBackBufferHeight);
 
-            Sdl.Window.GetSize(Handle, out _width, out _height);
+            Sdl.Window.GetSize(Handle, out int unscaledWidth, out int unscaledHeight);
+            _width = width;// (int)(unscaledWidth * Game.DisplayScale);
+            _height = height;// (int)(unscaledHeight * Game.DisplayScale);
 
             OnClientSizeChanged();
         }

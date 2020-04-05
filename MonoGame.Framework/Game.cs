@@ -22,6 +22,9 @@ namespace Microsoft.Xna.Framework
         private GameComponentCollection _components;
         private GameServiceContainer _services;
         private ContentManager _content;
+
+        public static float DisplayScale { get; set; }
+
         internal GamePlatform Platform;
 
         private SortingFilteringCollection<IDrawable> _drawables =
@@ -66,6 +69,7 @@ namespace Microsoft.Xna.Framework
             _services = new GameServiceContainer();
             _components = new GameComponentCollection();
             _content = new ContentManager(_services);
+            DisplayScale = 1.0f;
 
             Platform = GamePlatform.PlatformCreate(this);
             Platform.Activated += OnActivated;
