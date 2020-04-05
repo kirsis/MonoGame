@@ -297,6 +297,11 @@ namespace Microsoft.Xna.Framework.Graphics
 #endif
 
 #if IOS
+        public static Texture2D FromCGImage(GraphicsDevice graphicsDevice, CGImage cgImage)
+        {
+            return PlatformFromStream(graphicsDevice, cgImage);
+        }
+
         private static Texture2D PlatformFromStream(GraphicsDevice graphicsDevice, CGImage cgImage)
         {
 			var width = cgImage.Width;
