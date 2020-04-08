@@ -26,6 +26,23 @@ namespace Microsoft.Xna.Framework
         private int _isExiting;
         private SdlGameWindow _view;
 
+        public override float DisplayScale
+        {
+            get
+            {
+                Sdl.GL.GetDrawableSize(Window.Handle, out int w, out int h);
+                var wRatio = (float)w / (float)Window.ClientBounds.Width;
+                var hRatio = (float)h / (float)Window.ClientBounds.Height;
+
+                if (wRatio != hRatio)
+                {
+                    throw new InvalidOperationException("Could not determine display scale from drawable and client bounds.");
+                }
+
+                return wRatio;
+            }
+        }
+
         public SdlGamePlatform(Game game)
             : base(game)
         {

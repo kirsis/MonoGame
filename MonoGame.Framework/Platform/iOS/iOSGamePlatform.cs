@@ -91,6 +91,8 @@ namespace Microsoft.Xna.Framework
         private List<NSObject> _applicationObservers;
         private CADisplayLink _displayLink;
 
+        public override float DisplayScale => (float)UIScreen.MainScreen.NativeScale;
+
         public iOSGamePlatform(Game game) :
             base(game)
         {

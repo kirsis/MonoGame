@@ -47,6 +47,15 @@ namespace Microsoft.Xna.Framework
         public abstract GameRunBehavior DefaultRunBehavior { get; }
 
         /// <summary>
+        /// When implemented in a derived class, reports the default
+        /// display scale (e.g. 2x for retina Macs, etc.)
+        ///
+        /// This should return the actual in-use scale (if the device is capable of HiDPI
+        /// but it's not used - e.g. incorrect Info.plist for mac apps - this should return 1.0)
+        /// </summary>
+        public abstract float DisplayScale { get; }
+
+        /// <summary>
         /// Gets the Game instance that owns this GamePlatform instance.
         /// </summary>
         public Game Game
