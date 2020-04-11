@@ -36,7 +36,10 @@ namespace Microsoft.Xna.Framework
 
                 if (wRatio != hRatio)
                 {
-                    throw new InvalidOperationException("Could not determine display scale from drawable and client bounds.");
+                    // When resizing, these can not match (because we access this before
+                    // the new bounds are set.
+                    return wRatio;
+                    //throw new InvalidOperationException("Could not determine display scale from drawable and client bounds.");
                 }
 
                 return wRatio;
@@ -146,8 +149,8 @@ namespace Microsoft.Xna.Framework
                         Mouse.ScrollX += ev.Wheel.X * wheelDelta;
                         break;
                     case Sdl.EventType.MouseMotion:
-                        Window.MouseState.X = ev.Motion.X;
-                        Window.MouseState.Y = ev.Motion.Y;
+                        Window.MouseState.X = (int)(ev.Motion.X * Game.DisplayScale);
+                        Window.MouseState.Y = (int)(ev.Motion.Y * Game.DisplayScale);
                         break;
                     case Sdl.EventType.KeyDown:
                     {

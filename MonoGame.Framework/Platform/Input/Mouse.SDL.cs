@@ -42,8 +42,8 @@ namespace Microsoft.Xna.Framework.Input
             {
                 // Window does not have mouse focus, we need to manually get the position
                 var clientBounds = window.ClientBounds;
-                window.MouseState.X = x - clientBounds.X;
-                window.MouseState.Y = y - clientBounds.Y;
+                window.MouseState.X = (int)((x - clientBounds.X) * Game.DisplayScale);
+                window.MouseState.Y = (int)((y - clientBounds.Y) * Game.DisplayScale);
             }
 
             return window.MouseState;
