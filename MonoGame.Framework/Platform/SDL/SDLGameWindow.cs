@@ -142,7 +142,10 @@ namespace Microsoft.Xna.Framework
                 Sdl.Window.State.MouseFocus;
 
             if (_handle != IntPtr.Zero)
+            {
+                return;
                 Sdl.Window.Destroy(_handle);
+            }
 
             var winx = Sdl.Window.PosCentered;
             var winy = Sdl.Window.PosCentered;
