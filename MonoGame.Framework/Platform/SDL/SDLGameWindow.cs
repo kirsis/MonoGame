@@ -127,16 +127,19 @@ namespace Microsoft.Xna.Framework
                 }
             }
 
-            _handle = Sdl.Window.Create("", 0, 0,
-                GraphicsDeviceManager.DefaultBackBufferWidth, GraphicsDeviceManager.DefaultBackBufferHeight,
-                Sdl.Window.State.Hidden | Sdl.Window.State.AllowHighDPI);
+            //_handle = Sdl.Window.Create("", 0, 0,
+            //    GraphicsDeviceManager.DefaultBackBufferWidth,
+            //    GraphicsDeviceManager.DefaultBackBufferHeight,
+            //    Sdl.Window.State.Hidden | Sdl.Window.State.AllowHighDPI);
+
+            CreateWindow();
         }
 
         internal void CreateWindow()
         {
             var initflags =
                 Sdl.Window.State.OpenGL |
-                Sdl.Window.State.Hidden |
+                //Sdl.Window.State.Hidden |
                 Sdl.Window.State.InputFocus |
                 Sdl.Window.State.AllowHighDPI |
                 Sdl.Window.State.MouseFocus;

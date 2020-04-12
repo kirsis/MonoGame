@@ -24,7 +24,7 @@ namespace Microsoft.Xna.Framework
 
         #region Construction/Destruction
 
-		protected GamePlatform(Game game)
+        protected GamePlatform(Game game)
         {
             if (game == null)
                 throw new ArgumentNullException("game");

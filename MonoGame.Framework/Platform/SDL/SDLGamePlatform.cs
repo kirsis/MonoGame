@@ -106,7 +106,7 @@ namespace Microsoft.Xna.Framework
         {
             Sdl.Window.Show(Window.Handle);
 
-            while (true)
+            Func<bool> runLoopAction = () =>
             {
                 SdlRunLoop();
                 Game.Tick();
@@ -114,7 +114,18 @@ namespace Microsoft.Xna.Framework
                 GraphicsDevice.DisposeContexts();
 
                 if (_isExiting > 0)
-                    break;
+                    return false;
+
+                return true;
+            };
+
+            if (Game.RunLoopOverride != null)
+            {
+                Game.RunLoopOverride?.Invoke(runLoopAction);
+                return;
+            }
+
+            while (runLoopAction()) {
             }
         }
 
