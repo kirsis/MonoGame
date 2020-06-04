@@ -13,6 +13,10 @@ This package provides you with MonoGame Framework that uses OpenGL for rendering
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>XNADESIGNPROVIDED;LINUX;DESKTOPGL;SUPPORTS_EFX;STBSHARP_INTERNAL;OPENGL;OPENAL;DEBUG;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="bin\**\*" />
     <Compile Remove="obj\**\*" />
